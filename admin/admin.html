@@ -1,0 +1,622 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BCHS Facility Reservation Admin Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+       
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <div class="header">
+            <div>
+                <h1>BCHS Facility Reservation Admin Dashboard</h1>
+                <p class="subtitle">Manage room reservations, events, and manual facility blocks</p>
+            </div>
+        </div>
+
+        <!-- Tabs Navigation -->
+        <div class="tabs">
+            <div class="tabs-list">
+                <button class="tab-trigger active" data-tab="dashboard">
+                    Dashboard
+                </button>
+                <button class="tab-trigger" data-tab="queue">
+                    reservation Queue
+                </button>
+                <button class="tab-trigger" data-tab="confirmed">
+                    Confirmed
+                </button>
+                <button class="tab-trigger" data-tab="payments">
+                    Payment Status
+                </button>
+                <button class="tab-trigger" data-tab="cancellations">
+                    Cancellations
+                </button>
+                <button class="tab-trigger" data-tab="history">
+                    History
+                </button>
+            </div>
+
+            <!-- Dashboard Tab Content -->
+            <div class="tab-content active" id="dashboard-tab">
+                <div class="dashboard-toolbar">
+                    <div>
+                        <h2 style="font-size: 18px; font-weight: 700; margin: 0; color: #1e293b;">Reservation Control</h2>
+                        <p style="font-size: 12px; color: #64748b; margin: 2px 0 0 0;">Create manual entries or manage availability</p>
+                    </div>
+                    <div style="display: flex; gap: 10px;">
+                        <button class="btn btn-outline" id="openAddEventBtn">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="margin-right: 8px;"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                            Add Event
+                        </button>
+                        <button class="btn btn-bchs" id="openAddReservationBtn">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="margin-right: 8px;"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                            New Reservation
+                        </button>
+                    </div>
+                </div>
+
+                <div class="dashboard-grid">
+                    <div class="calendar-section">
+                        <div class="manual-control-hint">
+                            <div style="background: #1e293b; color: white; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                            </div>
+                            <div style="font-size: 13px;">
+                                <strong>Manual Availability Control:</strong> Click any day in the calendar to cancel availability for specific rooms and provide reasons.
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header" style="margin-bottom: 10px;">
+                                <h2 style="margin-bottom: 0;">Calendar</h2>
+                                <div style="display: flex; gap: 10px; align-items: center;">
+                                    <button class="btn btn-outline btn-sm" id="prevMonth">&lt;</button>
+                                    <span id="currentMonthYear" style="font-weight: 600; min-width: 120px; text-align: center;"></span>
+                                    <button class="btn btn-outline btn-sm" id="nextMonth">&gt;</button>
+                                </div>
+                            </div>
+                            <div id="calendar" class="calendar-grid"></div>
+                            <div id="selectedDateEvents" style="margin-top: 20px; border-top: 1px solid #e5e7eb; padding-top: 15px; display: none;">
+                                <h3 style="font-size: 16px; margin-bottom: 10px;">Details for <span id="selectedDateLabel"></span></h3>
+                                <div id="dayreservationsList"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="reservations-section">
+                        <div class="card filter-card" style="margin-bottom: 16px;">
+                            <div class="filter-header">
+                                <div style="display: flex; align-items: center; gap: 8px;">
+                                    <h3 style="margin: 0; font-size: 14px; font-weight: 500;">Quick Filters</h3>
+                                </div>
+                            </div>
+                            <div class="filter-grid">
+                                <div class="input-wrapper" style="grid-column: span 2;">
+                                    <input type="text" id="searchFilter" placeholder="Search reservations..." class="filter-input">
+                                </div>
+                                <select id="roomFilter" class="filter-select" style="grid-column: span 2;">
+                                    <option value="all">Filter: All Rooms</option>
+                                    <option value="Auditorium">Auditorium</option>
+                                    <option value="Library">Library</option>
+                                    <option value="Grounds">Grounds</option>
+                                    <option value="AVR">AVR</option>
+                                    <option value="Gym">Gym</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header">
+                                <h2>Upcoming Schedule</h2>
+                                <span class="badge badge-secondary" id="upcomingCount">0 entries</span>
+                            </div>
+                            <div class="scroll-area" id="upcomingreservations"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Queue Tab Content -->
+            <div class="tab-content" id="queue-tab">
+                <div class="card">
+                    <div class="card-header">
+                        <h2>New Requests</h2>
+                        <span class="badge badge-secondary" id="pendingCount">0 pending</span>
+                    </div>
+                    <div class="scroll-area">
+                        <table class="table" id="queueTable">
+                            <thead>
+                                <tr>
+                                    <th>Submitted</th>
+                                    <th>Name</th>
+                                    <th>Room</th>
+                                    <th>Requested Date</th>
+                                    <th>Purpose</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="queueTableBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Confirmed Tab Content -->
+            <div class="tab-content" id="confirmed-tab">
+                <div class="card">
+                    <div class="card-header">
+                        <h2>Confirmed Appointments</h2>
+                        <span class="badge badge-secondary" id="confirmedCount">0 confirmed</span>
+                    </div>
+                    <div class="scroll-area">
+                        <table class="table" id="confirmedTable">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Room</th>
+                                    <th>Event Date</th>
+                                    <th>Confirmation Date</th>
+                                    <th>Confirmation Time</th>
+                                    <th>Purpose</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="confirmedTableBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Payments Tab Content -->
+            <div class="tab-content" id="payments-tab">
+                <div class="payment-summary-bar">
+                    <div class="payment-summary-card">
+                        <h4>Total Collected</h4>
+                        <div class="value" id="totalCollectedValue" style="color: #166534;">₱0.00</div>
+                    </div>
+                    <div class="payment-summary-card">
+                        <h4>Pending Collection</h4>
+                        <div class="value" id="totalPendingValue" style="color: #92400e;">₱0.00</div>
+                    </div>
+                    <div class="payment-summary-card">
+                        <h4>Collection Rate</h4>
+                        <div class="value" id="collectionRateValue" style="color: #1e293b;">0%</div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <h2>Direct Payment Management</h2>
+                        <div style="font-size: 12px; color: #64748b;">Click status badges to toggle or adjust amounts inline.</div>
+                    </div>
+                    <div id="paidTableContainer">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Booker Name</th>
+                                    <th>Facility</th>
+                                    <th>Date</th>
+                                    <th>Amount (₱)</th>
+                                    <th>Payment Tracking</th>
+                                    <th>Payment Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="paidTableBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Cancellations Tab Content -->
+            <div id="cancellations-tab" class="tab-content">
+                <div class="card">
+                    <div class="card-header">
+                        <h2>Cancellation Requests</h2>
+                        <span class="badge badge-secondary" id="cancellationsCount">0 requests</span>
+                    </div>
+                    <div class="scroll-area">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Requested</th>
+                                    <th>Name</th>
+                                    <th>Room</th>
+                                    <th>Event Date</th>
+                                    <th>Cancellation Reason</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="cancellationsTableBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- History Tab Content -->
+            <div id="history-tab" class="tab-content">
+                <div class="card">
+                    <div class="card-header">
+                        <h2>Record History</h2>
+                        <span class="badge badge-secondary" id="historyCount">0 records</span>
+                    </div>
+                    <div class="scroll-area">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Name</th>
+                                    <th>Room</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="historyTableBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Event Modal -->
+    <div class="modal" id="addEventModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Post New School Event</h2>
+                <button class="modal-close" onclick="closeAddEventModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-grid">
+                    <div class="form-group full-width">
+                        <label>Event Title *</label>
+                        <input type="text" class="input" id="eventTitle" placeholder="e.g., Annual Science Fair">
+                    </div>
+                    <div class="form-group">
+                        <label>Date *</label>
+                        <input type="date" class="input" id="eventDate">
+                    </div>
+                    <div class="form-group">
+                        <label>Time Range *</label>
+                        <input type="text" class="input" id="eventTime" placeholder="e.g., 9:00 AM - 4:00 PM">
+                    </div>
+                    <div class="form-group">
+                        <label>Location *</label>
+                        <select class="select" id="eventLocation">
+                            <option value="Auditorium">Auditorium</option>
+                            <option value="Library">Library</option>
+                            <option value="Grounds">Grounds</option>
+                            <option value="AVR">AVR</option>
+                            <option value="Gym">Gym</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Expected Attendees</label>
+                        <input type="number" class="input" id="eventAttendees" value="0">
+                    </div>
+                    <div class="form-group full-width">
+                        <label>Description *</label>
+                        <textarea class="textarea" id="eventDescription" rows="3" placeholder="Briefly describe the event..."></textarea>
+                    </div>
+                    <div class="form-group full-width">
+                        <label>Image URL (Optional)</label>
+                        <input type="text" class="input" id="eventImageUrl" placeholder="https://images.unsplash.com/...">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeAddEventModal()">Cancel</button>
+                <button class="btn btn-primary" id="saveEventBtn">Post Event</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Facility Manager Modal (Enhanced Day Toggle) -->
+    <div class="modal" id="quickBlockModal">
+        <div class="modal-content modal-small">
+            <div class="modal-header">
+                <h2>Cancel Facility Availability</h2>
+                <button class="modal-close" onclick="closeQuickBlock()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p style="margin-bottom: 15px; font-size: 14px; color: #475569;">
+                    Manage facility availability for <strong id="quickBlockDateLabel" style="color:#0f172a;"></strong>.
+                </p>
+                
+                <div class="form-group" style="margin-bottom: 16px;">
+                    <label style="font-weight: 600;">Select Facilities to BLOCK</label>
+                    <div id="roomCheckboxList" class="room-checkbox-grid">
+                        <label class="room-checkbox-item"><input type="checkbox" name="roomBlock" value="all"> <strong>ALL FACILITIES</strong></label>
+                        <label class="room-checkbox-item"><input type="checkbox" name="roomBlock" value="Auditorium"> Auditorium</label>
+                        <label class="room-checkbox-item"><input type="checkbox" name="roomBlock" value="Library"> Library</label>
+                        <label class="room-checkbox-item"><input type="checkbox" name="roomBlock" value="Grounds"> Grounds</label>
+                        <label class="room-checkbox-item"><input type="checkbox" name="roomBlock" value="AVR"> AVR</label>
+                        <label class="room-checkbox-item"><input type="checkbox" name="roomBlock" value="Gym"> Gym</label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label style="font-weight: 600;">Reason for Cancellation *</label>
+                    <textarea class="textarea" id="quickBlockReason" rows="3" placeholder="e.g., General Maintenance, School Holiday, Event Prep"></textarea>
+                    <p style="font-size: 11px; color: #64748b; margin-top: 4px;">This reason will be visible to users in the calendar.</p>
+                </div>
+
+                <div id="existingBlocksList" class="existing-blocks-section" style="display:none;">
+                    <label style="font-weight: 600; color: #b91c1c; display: block; margin-bottom: 8px;">Active Blocks (Already Cancelled)</label>
+                    <div id="blocksContainer"></div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeQuickBlock()">Close</button>
+                <button class="btn btn-destructive" id="confirmQuickBlockBtn">Apply Blocks</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Manual Reservation Modal -->
+    <div class="modal" id="addReservationModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Add Manual Reservation</h2>
+                <button class="modal-close" onclick="closeAddReservationModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-grid">
+                    <div class="form-group full-width">
+                        <label>Event Name / Organization Name *</label>
+                        <input type="text" class="input" id="manualName" placeholder="e.g., Science Dept. Conference">
+                    </div>
+                    <div class="form-group">
+                        <label>Select Room *</label>
+                        <select class="select" id="manualRoom">
+                            <!-- Populated by JS -->
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Date *</label>
+                        <input type="date" class="input" id="manualDate">
+                    </div>
+                    <div class="form-group">
+                        <label>Start Time *</label>
+                        <select class="select" id="manualStartTime">
+                            <option value="07:00">7:00 AM</option>
+                            <option value="08:00">8:00 AM</option>
+                            <option value="09:00">9:00 AM</option>
+                            <option value="10:00">10:00 AM</option>
+                            <option value="11:00">11:00 AM</option>
+                            <option value="12:00">12:00 PM</option>
+                            <option value="13:00">1:00 PM</option>
+                            <option value="14:00">2:00 PM</option>
+                            <option value="15:00">3:00 PM</option>
+                            <option value="16:00">4:00 PM</option>
+                            <option value="17:00">5:00 PM</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>End Time *</label>
+                        <select class="select" id="manualEndTime">
+                            <option value="08:00">8:00 AM</option>
+                            <option value="09:00">9:00 AM</option>
+                            <option value="10:00">10:00 AM</option>
+                            <option value="11:00">11:00 AM</option>
+                            <option value="12:00">12:00 PM</option>
+                            <option value="13:00">1:00 PM</option>
+                            <option value="14:00">2:00 PM</option>
+                            <option value="15:00">3:00 PM</option>
+                            <option value="16:00">4:00 PM</option>
+                            <option value="17:00">5:00 PM</option>
+                            <option value="18:00">6:00 PM</option>
+                        </select>
+                    </div>
+                    <div class="form-group full-width">
+                        <label>Purpose / Description</label>
+                        <textarea class="textarea" id="manualPurpose" rows="3" placeholder="Brief description of the activity..."></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Estimated Attendees</label>
+                        <input type="number" class="input" id="manualAttendees" value="0" min="0">
+                    </div>
+                    <div class="form-group">
+                        <label>Payment Status</label>
+                        <select class="select" id="manualPaymentStatus">
+                            <option value="paid">Paid</option>
+                            <option value="pending">Pending</option>
+                            <option value="unpaid">Unpaid</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeAddReservationModal()">Cancel</button>
+                <button class="btn btn-primary" id="saveManualReservationBtn">Save Reservation</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Manage reservation Modal (Unified Context-Aware Editor) -->
+    <div class="modal" id="editModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="editModalTitle">Manage reservation Entry</h2>
+                <button class="modal-close" id="closeEditModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div id="edit-summary" style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; padding:15px; margin-bottom:10px;"></div>
+                
+                <div class="modal-section-title">Schedule Details</div>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Facility *</label>
+                        <select class="select edit-field-locked" id="editRoomId">
+                            <!-- Populated by JS -->
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Event Date *</label>
+                        <input type="date" class="input edit-field-locked" id="editDate">
+                    </div>
+                    <div class="form-group">
+                        <label>Start Time *</label>
+                        <select class="select edit-field-locked" id="editStartTime">
+                            <option value="07:00">7:00 AM</option>
+                            <option value="08:00">8:00 AM</option>
+                            <option value="09:00">9:00 AM</option>
+                            <option value="10:00">10:00 AM</option>
+                            <option value="11:00">11:00 AM</option>
+                            <option value="12:00">12:00 PM</option>
+                            <option value="13:00">1:00 PM</option>
+                            <option value="14:00">2:00 PM</option>
+                            <option value="15:00">3:00 PM</option>
+                            <option value="16:00">4:00 PM</option>
+                            <option value="17:00">5:00 PM</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>End Time *</label>
+                        <select class="select edit-field-locked" id="editEndTime">
+                            <option value="08:00">8:00 AM</option>
+                            <option value="09:00">9:00 AM</option>
+                            <option value="10:00">10:00 AM</option>
+                            <option value="11:00">11:00 AM</option>
+                            <option value="12:00">12:00 PM</option>
+                            <option value="13:00">1:00 PM</option>
+                            <option value="14:00">2:00 PM</option>
+                            <option value="15:00">3:00 PM</option>
+                            <option value="16:00">4:00 PM</option>
+                            <option value="17:00">5:00 PM</option>
+                            <option value="18:00">6:00 PM</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="modal-section-title">Confirmation Visit</div>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Appointment Date</label>
+                        <input type="date" class="input edit-field-locked edit-field-appointment" id="editAppointmentDate">
+                    </div>
+                    <div class="form-group">
+                        <label>Appointment Time</label>
+                        <input type="time" class="input edit-field-locked edit-field-appointment" id="editAppointmentTime">
+                    </div>
+                </div>
+
+                <div class="modal-section-title">Financials & Status</div>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Total Amount (₱)</label>
+                        <input type="number" class="input" id="editAmount" step="0.01">
+                    </div>
+                    
+                    <div class="form-group" style="display: flex; flex-direction: column;">
+                        <label>Payment Status</label>
+                        <div class="status-button-group" id="paymentStatusGroup">
+                            <button type="button" class="status-btn" data-value="paid" onclick="selectPaymentStatus('paid')">Paid</button>
+                            <button type="button" class="status-btn" data-value="pending" onclick="selectPaymentStatus('pending')">Pending</button>
+                            <button type="button" class="status-btn" data-value="unpaid" onclick="selectPaymentStatus('unpaid')">Unpaid</button>
+                        </div>
+                        <input type="hidden" id="editPaymentStatus" value="pending">
+                    </div>
+                    
+                    <!-- Down Payment Tracking - Right Side -->
+                    <div class="form-group" id="downPaymentSection" style="background: #f8fafc; padding: 12px; border-radius: 8px; border: 2px solid #e2e8f0;">
+                        <label style="font-weight: 700; color: #1e293b; margin-bottom: 8px; display: block;">
+                             Payment Breakdown
+                        </label>
+                        
+                        <div style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 12px;">
+                            <div style="background: white; padding: 10px; border-radius: 6px; border: 1px solid #e2e8f0;">
+                                <div style="font-size: 11px; color: #64748b; margin-bottom: 4px;">Down Payment (₱2,000)</div>
+                                <div style="display: flex; align-items: center; gap: 8px;">
+                                    <input type="checkbox" id="downPaymentPaid" style="width: 18px; height: 18px; cursor: pointer;">
+                                    <label for="downPaymentPaid" style="font-size: 13px; font-weight: 600; cursor: pointer; margin: 0;" id="downPaymentLabel">Not Paid</label>
+                                </div>
+                            </div>
+                            
+                            <div style="background: white; padding: 10px; border-radius: 6px; border: 1px solid #e2e8f0;">
+                                <div style="font-size: 11px; color: #64748b; margin-bottom: 4px;">Remaining Balance</div>
+                                <div style="display: flex; align-items: center; gap: 8px;">
+                                    <input type="checkbox" id="remainingBalancePaid" style="width: 18px; height: 18px; cursor: pointer;">
+                                    <label for="remainingBalancePaid" style="font-size: 13px; font-weight: 600; cursor: pointer; margin: 0;" id="remainingBalanceLabel">Not Paid</label>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div id="paymentSummary" style="background: white; padding: 10px; border-radius: 6px; border: 1px solid #e2e8f0; font-size: 12px;">
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
+                                <span style="color: #64748b;">Total Amount:</span>
+                                <span style="font-weight: 600;" id="summaryTotal">₱0.00</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
+                                <span style="color: #64748b;">Down Payment:</span>
+                                <span style="font-weight: 600;" id="summaryDown">₱0.00</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
+                                <span style="color: #64748b;">Remaining:</span>
+                                <span style="font-weight: 600;" id="summaryRemaining">₱0.00</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; padding-top: 8px; border-top: 2px solid #e2e8f0; margin-top: 8px;">
+                                <span style="color: #1e293b; font-weight: 700;">Amount Paid:</span>
+                                <span style="font-weight: 700; color: #800020;" id="summaryPaid">₱0.00</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group full-width">
+                        <label>Current Status</label>
+                        <div class="status-button-group" id="reservationStatusGroup">
+                            <button type="button" class="status-btn reservation-status" data-value="pending" onclick="selectReservationStatus('pending')">Pending Review</button>
+                            <button type="button" class="status-btn" data-value="approved" onclick="selectReservationStatus('approved')">Approved</button>
+                            <button type="button" class="status-btn" data-value="rejected" onclick="selectReservationStatus('rejected')">Rejected</button>
+                        </div>
+                        <input type="hidden" class="edit-field-locked" id="editStatus" value="pending">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="cancelEdit">Cancel</button>
+                <button class="btn btn-primary" id="saveEdit">Update & Save</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="toastContainer" style="position: fixed; top: 20px; right: 20px; z-index: 10000; display: flex; flex-direction: column; gap: 12px;"></div>
+
+    <!-- Rejection Reason Modal -->
+    <div class="modal" id="rejectionReasonModal">
+        <div class="modal-content modal-small">
+            <div class="modal-header">
+                <h2>Rejection Reason Required</h2>
+                <button class="modal-close" onclick="closeRejectionModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p style="margin-bottom: 15px; font-size: 14px; color: #475569;">
+                    Please provide a reason for rejecting this reservation request. This will be sent to the requester via email and SMS.
+                </p>
+                
+                <div class="form-group">
+                    <label style="font-weight: 600;">Rejection Reason *</label>
+                    <textarea class="textarea" id="rejectionReasonText" rows="4" placeholder="e.g., Facility already booked for that date, Does not meet requirements, etc."></textarea>
+                </div>
+
+                <div style="background: #fef3c7; border: 1px solid #fde047; border-radius: 6px; padding: 12px; margin-top: 12px;">
+                    <div style="display: flex; gap: 8px; align-items: start;">
+                        <span style="font-size: 18px;">⚠️</span>
+                        <div style="font-size: 12px; color: #92400e;">
+                            <strong>Note:</strong> The requester will be notified at:<br>
+                            <span id="rejectionContactInfo" style="font-weight: 600;"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeRejectionModal()">Cancel</button>
+                <button class="btn btn-destructive" id="confirmRejectionBtn" onclick="confirmRejection()">Send Rejection</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,38 @@
+{
+  "rooms": [
+    {
+      "id": "auditorium",
+      "name": "Auditorium",
+      "capacity": 1000,
+      "pricePerHour": 1800
+    },
+    {
+      "id": "library",
+      "name": "Library",
+      "capacity": 100,
+      "pricePerHour": 1000
+    },
+    {
+      "id": "grounds",
+      "name": "Grounds",
+      "capacity": 180,
+      "pricePerHour": 700
+    },
+    {
+      "id": "avr",
+      "name": "AVR",
+      "capacity": 150,
+      "pricePerHour": 500
+    },
+    {
+      "id": "gym",
+      "name": "Gym",
+      "capacity": 200,
+      "pricePerHour": 1000
+    }
+  ],
+  "utilityFee": {
+    "amount": 800,
+    "description": "Utility service fee (for 8+ hours)"
+  }
+}

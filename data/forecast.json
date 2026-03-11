@@ -1,0 +1,106 @@
+{
+  "forecast": {
+    "lastUpdated": "2025-03-05T10:30:00Z",
+    "summary": {
+      "totalreservations": 45,
+      "mostPopularRoom": "Auditorium",
+      "peakHours": "2:00 PM - 4:00 PM",
+      "averageAttendees": 125
+    },
+    "roomAnalytics": [
+      {
+        "roomId": "auditorium",
+        "roomName": "Auditorium",
+        "totalreservations": 18,
+        "averageAttendees": 175,
+        "utilizationRate": "72%",
+        "trend": "increasing",
+        "peakDays": ["Wed", "Fri"],
+        "predictedNextWeek": 5
+      },
+      {
+        "roomId": "library",
+        "roomName": "Library",
+        "totalreservations": 15,
+        "averageAttendees": 35,
+        "utilizationRate": "58%",
+        "trend": "neutral",
+        "peakDays": ["Mon", "Thu"],
+        "predictedNextWeek": 4
+      },
+      {
+        "roomId": "grounds",
+        "roomName": "Grounds",
+        "totalreservations": 8,
+        "averageAttendees": 580,
+        "utilizationRate": "45%",
+        "trend": "increasing",
+        "peakDays": ["Tue", "Sat"],
+        "predictedNextWeek": 3
+      },
+      {
+        "roomId": "avr",
+        "roomName": "AVR",
+        "totalreservations": 3,
+        "averageAttendees": 45,
+        "utilizationRate": "28%",
+        "trend": "neutral",
+        "peakDays": ["Wed"],
+        "predictedNextWeek": 1
+      },
+      {
+        "roomId": "gym",
+        "roomName": "Gym",
+        "totalreservations": 1,
+        "averageAttendees": 80,
+        "utilizationRate": "15%",
+        "trend": "decreasing",
+        "peakDays": ["Fri"],
+        "predictedNextWeek": 0
+      }
+    ],
+    "weeklyTrends": [
+      {
+        "week": "Current Week (Mar 3-9)",
+        "totalreservations": 12,
+        "auditorium": 5,
+        "library": 4,
+        "grounds": 2,
+        "avr": 1,
+        "gym": 0
+      },
+      {
+        "week": "Predicted Next Week (Mar 10-16)",
+        "totalreservations": 13,
+        "auditorium": 5,
+        "library": 4,
+        "grounds": 3,
+        "avr": 1,
+        "gym": 0
+      },
+      {
+        "week": "Predicted Week 3 (Mar 17-23)",
+        "totalreservations": 15,
+        "auditorium": 6,
+        "library": 5,
+        "grounds": 3,
+        "avr": 1,
+        "gym": 0
+      }
+    ],
+    "recommendations": [
+      {
+        "priority": "high",
+        "message": "Auditorium bookings are at 72% capacity. Consider adding more time slots during peak hours (2-4 PM)."
+      },
+      {
+        "priority": "medium",
+        "message": "Library usage is steady. Promote study group packages to increase weekday bookings."
+      },
+      {
+        "priority": "low",
+        "message": "Gym utilization is low at 15%. Consider promotional campaigns or special events to boost bookings."
+      }
+    ]
+  }
+}

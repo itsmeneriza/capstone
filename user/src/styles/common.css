@@ -1,0 +1,134 @@
+/* 
+ * BCHS Unified Theme - Common Styles
+ * Standardized BCHS Green identity for User and Admin Apps
+ */
+
+:root {
+    /* Primary Brand Identity */
+    --primary-color: #800020;
+    --primary-hover: #660019;
+    --secondary-color: #6b7280;
+    --page-bg: #f9fafb;
+    
+    /* Global Layout */
+    --header-bg: #800020;
+    --header-text: #ffffff;
+    --border-color: #e5e7eb;
+    
+    /* Interactive Elements */
+    --button-primary: var(--primary-color);
+    --button-primary-hover: var(--primary-hover);
+    --room-selected-bg: #fff5f7;
+    --room-selected-border: #800020;
+    
+    /* Status Coloring */
+    --status-pending: #f59e0b;
+    --status-approved: #800020;
+    --status-rejected: #ef4444;
+    
+    /* Calendar & Data Densities */
+    --calendar-today-bg: #fff5f7;
+    --calendar-selected-bg: var(--primary-color);
+    --calendar-busy-bg: #fde047;
+    --calendar-full-bg: #fca5a5;
+    --calendar-light-bg: #ffccd5;
+    --calendar-pending-bg: #fef3c7;
+    
+    /* Chat Identity */
+    --chat-user-msg: var(--primary-color);
+    --chat-assistant-msg: #f3f4f6;
+}
+
+/* Rest of file remains identical */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background-color: var(--page-bg);
+    color: #111827;
+    line-height: 1.5;
+}
+
+.header {
+    background-color: var(--header-bg);
+    color: var(--header-text);
+    padding: 1.25rem 2rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.header-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.header-title { font-size: 1.5rem; font-weight: 700; }
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.625rem 1.25rem;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    font-size: 0.875rem;
+    font-weight: 600;
+    transition: all 0.2s;
+    text-decoration: none;
+}
+
+.btn-primary { background-color: var(--button-primary); color: white; }
+.btn-primary:hover { background-color: var(--button-primary-hover); transform: translateY(-1px); }
+.btn-secondary { background-color: #f3f4f6; color: #374151; border: 1px solid #d1d5db; }
+.btn-destructive { background-color: #dc2626; color: white; }
+
+.badge {
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.badge-success { background-color: #fff5f7; color: #660019; }
+.badge-warning { background-color: #fef3c7; color: #92400e; }
+.badge-destructive { background-color: #fee2e2; color: #991b1b; }
+
+.toast-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.toast {
+    background: white;
+    padding: 1rem;
+    border-radius: 8px;
+    box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
+    border-left: 4px solid var(--primary-color);
+    min-width: 280px;
+    animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+
+.spinner-small {
+    width: 14px;
+    height: 14px;
+    border: 2px solid rgba(0,0,0,0.05);
+    border-top-color: var(--primary-color);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }

@@ -1,0 +1,85 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BCHS Facility Reservation - Baguio City High School</title>
+    <link rel="stylesheet" href="../src/styles/common.css">
+    <link rel="stylesheet" href="../src/styles/landing.css">
+</head>
+<body>
+    <div class="landing-page">
+        <!-- Header -->
+        <header class="landing-header">
+            <div class="landing-header-content">
+                <div class="landing-logo-section">
+                    <div class="landing-logo">
+                        <img src="https://upload.wikimedia.org/wikipedia/en/9/9e/Baguio_City_National_High_School_logo.png" alt="Baguio City High School Logo">
+                    </div>
+                    <div class="landing-title">
+                        <h1>BCHS Facility Reservation</h1>
+                        <p>Baguio City High School</p>
+                    </div>
+                </div>
+                <nav class="landing-nav">
+                    <a href="#upcoming">Upcoming Events</a>
+                    <a href="#past">Past Events</a>
+                    <button class="btn btn-primary" onclick="window.location.href='reservation.html'">
+                        Book a Room
+                    </button>
+                </nav>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <div class="landing-main">
+            <!-- Left Side - Events -->
+            <div class="landing-content">
+                <!-- Hero Section -->
+                <div class="landing-hero">
+                    <h2>Welcome to BCHS</h2>
+                    <p>Discover and manage school events at Baguio City High School. Book rooms for your activities with ease.</p>
+                    <div class="landing-hero-buttons">
+                        <button class="btn btn-primary" onclick="window.location.href='reservation.html'">
+                            Start reservation
+                        </button>
+                        <button class="btn btn-secondary" onclick="document.getElementById('upcoming').scrollIntoView({ behavior: 'smooth' })">
+                            View Events
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Upcoming Events -->
+                <div id="upcoming" class="landing-section">
+                    <h3>Upcoming Events</h3>
+                    <div id="upcoming-events-grid" class="event-grid">
+                        <!-- Events will be loaded dynamically -->
+                        <p class="empty-message">Loading events...</p>
+                    </div>
+                </div>
+
+                <!-- Past Events -->
+                <div id="past" class="landing-section">
+                    <h3>Past Events</h3>
+                    <div id="past-events-grid" class="event-grid">
+                        <!-- Events will be loaded dynamically -->
+                        <p class="empty-message">Loading events...</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Side - Background Image -->
+            <div class="landing-background">
+                <div class="landing-background-sticky">
+                    <div class="landing-background-overlay">
+                        <h2>Excellence in Education</h2>
+                        <p>reservation made easy with Baguio City National High School</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="../src/landing.js"></script>
+</body>
+</html>

@@ -1,0 +1,84 @@
+{
+  "events": [
+    {
+      "id": "1",
+      "title": "Annual Science Fair",
+      "date": "2026-01-15",
+      "time": "9:00 AM - 4:00 PM",
+      "location": "Auditorium",
+      "attendees": 500,
+      "description": "Student science project exhibitions and competitions",
+      "image": "https://images.unsplash.com/photo-1708811409046-33d70f23eb86?w=800"
+    },
+    {
+      "id": "2",
+      "title": "Christmas Concert",
+      "date": "2026-01-20",
+      "time": "6:00 PM - 9:00 PM",
+      "location": "Auditorium",
+      "attendees": 800,
+      "description": "Annual holiday music performance by school choir and orchestra",
+      "image": "https://images.unsplash.com/photo-1700087209989-5a83d1a7c484?w=800"
+    },
+    {
+      "id": "3",
+      "title": "New Year Celebration",
+      "date": "2026-01-01",
+      "time": "6:00 PM - 8:00 PM",
+      "location": "Grounds",
+      "attendees": 1500,
+      "description": "Community gathering to welcome the new year",
+      "image": "https://images.unsplash.com/photo-1758316727379-4c995d3ae455?w=800"
+    },
+    {
+      "id": "4",
+      "title": "Parent-Teacher Conference",
+      "date": "2026-02-10",
+      "time": "1:00 PM - 5:00 PM",
+      "location": "Library",
+      "attendees": 150,
+      "description": "Quarterly academic progress discussions",
+      "image": "https://images.unsplash.com/photo-1758316727379-4c995d3ae455?w=800"
+    },
+    {
+      "id": "5",
+      "title": "Sports Day",
+      "date": "2026-02-15",
+      "time": "8:00 AM - 5:00 PM",
+      "location": "Grounds",
+      "attendees": 1200,
+      "description": "Annual inter-house sports competition and games",
+      "image": "https://images.unsplash.com/photo-1729553199932-5c969712e895?w=800"
+    },
+    {
+      "id": "6",
+      "title": "Foundation Day Celebration",
+      "date": "2026-02-01",
+      "time": "9:00 AM - 3:00 PM",
+      "location": "Auditorium",
+      "attendees": 950,
+      "description": "School anniversary celebration with performances and exhibits",
+      "image": "https://images.unsplash.com/photo-1758316727379-4c995d3ae455?w=800"
+    },
+    {
+      "id": "7",
+      "title": "Alumni Homecoming",
+      "date": "2026-02-20",
+      "time": "2:00 PM - 7:00 PM",
+      "location": "Grounds",
+      "attendees": 600,
+      "description": "Annual gathering of BCHS alumni from different batches",
+      "image": "https://images.unsplash.com/photo-1758316727379-4c995d3ae455?w=800"
+    },
+    {
+      "id": "8",
+      "title": "Academic Recognition Day",
+      "date": "2026-01-30",
+      "time": "10:00 AM - 12:00 PM",
+      "location": "Auditorium",
+      "attendees": 400,
+      "description": "Honors and awards ceremony for outstanding students",
+      "image": "https://images.unsplash.com/photo-1758316727379-4c995d3ae455?w=800"
+    }
+  ]
+}
